@@ -1,5 +1,8 @@
 // Go implementation for the "Functions and Fractals - Recursive Trees - Bash!" problem.
 // https://www.hackerrank.com/challenges/fractal-trees-all/problem
+//
+// Live code - https://play.golang.org/p/qXfP_6i7AMW
+//
 package main
 
 import (
