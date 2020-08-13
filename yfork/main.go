@@ -42,11 +42,7 @@ func (r Row) String() string {
 	// Convert uint64 to []byte{} in-place, replacing 0 with '_' an 1 with '1'.
 	buf := [64]byte{}
 	for i := len(buf) - 1; i >= 0; i-- {
-		if (r>>i)&0x1 != 0 {
-			buf[i] = '1'
-		} else {
-			buf[i] = '_'
-		}
+		buf[i] = '_' - byte((r>>i)&0x1*46) // magic :)
 	}
 	return string(buf[:])
 }
