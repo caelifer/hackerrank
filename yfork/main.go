@@ -1,8 +1,6 @@
 // Go implementation for the "Functions and Fractals - Recursive Trees - Bash!" problem.
 // https://www.hackerrank.com/challenges/fractal-trees-all/problem
 //
-// Live code - https://play.golang.org/p/qXfP_6i7AMW
-//
 package main
 
 import (
@@ -16,17 +14,17 @@ const (
 )
 
 func main() {
-	var scrn = [][64]byte{}
+	scn := NewScreen()
 	for z := uint64(0); z < 6; z++ {
 		x := uint64(1 << z)
 		for i := uint64(0); i < h/x+1; i++ {
-			scrn = addLine(scrn, stem(x), x)
+			scn.AppendLine(stem(x), x)
 		}
 		for i := uint64(0); i < h/x+1; i++ {
-			scrn = addLine(scrn, fork(x, i), x)
+			scn.AppendLine(fork(x, i), x)
 		}
 	}
-	printScreen(scrn)
+	scn.Print()
 }
 
 func stem(scale uint64) uint64 {
@@ -38,30 +36,41 @@ func fork(scale, iter uint64) uint64 {
 	return n << (64/(2*scale) - iter - 1)
 }
 
-func addLine(scrBuf [][64]byte, seg, scale uint64) [][64]byte {
-	n, ln := uint64(0), 64/scale
+type Row uint64
 
-	for i := uint64(0); i < scale; i++ {
-		n |= seg << (i * ln)
-	}
-
+func (r Row) String() string {
 	// Convert uint64 to []byte{} in-place, replacing 0 with '_' an 1 with '1'.
 	buf := [64]byte{}
 	for i := len(buf) - 1; i >= 0; i-- {
-		if (n>>i)&0x1 != 0 {
+		if (r>>i)&0x1 != 0 {
 			buf[i] = '1'
 		} else {
 			buf[i] = '_'
 		}
 	}
-
-	// Add a line to a screen buffer.
-	return append(scrBuf, buf)
+	return string(buf[:])
 }
 
-func printScreen(scrn [][64]byte) {
+type Screen []Row
+
+func NewScreen() *Screen {
+	s := Screen(make([]Row, 0, 64))
+	return &s
+}
+
+func (s Screen) Print() {
 	fmt.Println(topLine)
-	for i := len(scrn) - 2; i > 0; i-- {
-		fmt.Printf("%s%s%s\n", sidePad, string(scrn[i][:]), sidePad)
+	// Print in reverse, skipping last line.
+	for i := len(s) - 2; i > 0; i-- {
+		fmt.Printf("%s%s%s\n", sidePad, s[i], sidePad)
 	}
+}
+
+func (s *Screen) AppendLine(seg, scale uint64) {
+	n := uint64(0)
+	for i := uint64(0); i < scale; i++ {
+		mag := i * 64 / scale // shift magnitude
+		n |= seg << mag
+	}
+	*s = append(*s, Row(n))
 }
