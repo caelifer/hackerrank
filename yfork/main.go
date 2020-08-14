@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 )
 
@@ -24,7 +25,7 @@ func main() {
 			scn.AppendLine(fork(x, i), x)
 		}
 	}
-	scn.Print()
+	fmt.Println(scn)
 }
 
 func stem(scale uint64) uint64 {
@@ -54,12 +55,14 @@ func NewScreen() *Screen {
 	return &s
 }
 
-func (s Screen) Print() {
-	fmt.Println(topLine)
+func (s Screen) String() string {
+	buf := new(bytes.Buffer)
+	fmt.Fprintln(buf, topLine)
 	// Print in reverse, skipping last line.
 	for i := len(s) - 2; i > 0; i-- {
-		fmt.Printf("%s%s%s\n", sidePad, s[i], sidePad)
+		fmt.Fprintf(buf, "%s%s%s\n", sidePad, s[i], sidePad)
 	}
+	return buf.String()
 }
 
 func (s *Screen) AppendLine(seg, scale uint64) {
