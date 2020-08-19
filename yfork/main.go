@@ -19,20 +19,20 @@ func main() {
 	for z := uint64(0); z < 6; z++ {
 		x := uint64(1 << z)
 		for i := uint64(0); i < h/x+1; i++ {
-			scn.AppendLine(stem(x), x)
+			scn.AppendLine(drawStemPart(x), x)
 		}
 		for i := uint64(0); i < h/x+1; i++ {
-			scn.AppendLine(fork(x, i), x)
+			scn.AppendLine(drawForkPart(x, i), x)
 		}
 	}
 	fmt.Println(scn)
 }
 
-func stem(scale uint64) uint64 {
+func drawStemPart(scale uint64) uint64 {
 	return 1 << (64/(2*scale) - 1)
 }
 
-func fork(scale, iter uint64) uint64 {
+func drawForkPart(scale, iter uint64) uint64 {
 	n := uint64((1 << (2 * iter)) | 1)
 	return n << (64/(2*scale) - iter - 1)
 }
@@ -43,7 +43,7 @@ func (r Row) String() string {
 	// Convert uint64 to []byte{} in-place, replacing 0 with '_' an 1 with '1'.
 	buf := [64]byte{}
 	for i := len(buf) - 1; i >= 0; i-- {
-		buf[i] = '_' - byte((r>>i)&0x1*46) // magic :)
+		buf[i] = '_' - byte((r>>i)&0x1)*46 // magic :)
 	}
 	return string(buf[:])
 }
@@ -73,3 +73,5 @@ func (s *Screen) AppendLine(seg, scale uint64) {
 	}
 	*s = append(*s, Row(n))
 }
+
+// vim: :ts=4:sw=4:noet:ai
