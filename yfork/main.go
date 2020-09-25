@@ -6,6 +6,9 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"log"
+	"os"
 )
 
 const (
@@ -15,6 +18,12 @@ const (
 )
 
 func main() {
+	if err := run(os.Stdout); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run(w io.Writer) error {
 	scn := NewScreen()
 	for z := uint64(0); z < 6; z++ {
 		x := uint64(1 << z)
@@ -25,7 +34,8 @@ func main() {
 			scn.AppendLine(drawForkPart(x, i), x)
 		}
 	}
-	fmt.Println(scn)
+	_, err := fmt.Fprintln(w, scn)
+	return err
 }
 
 func drawStemPart(scale uint64) uint64 {
