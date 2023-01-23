@@ -7,7 +7,7 @@ import (
 	"github.com/kylelemons/godebug/diff"
 )
 
-var sample = `__________________________________________________________________________________________________
+var expectedPic = `__________________________________________________________________________________________________
 _________________1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1__________________
 __________________1___1___1___1___1___1___1___1___1___1___1___1___1___1___1___1___________________
 __________________1___1___1___1___1___1___1___1___1___1___1___1___1___1___1___1___________________
@@ -81,7 +81,7 @@ func TestPicture(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if generated := out.String(); generated != sample {
-		t.Fatalf("Generated picture did not match:\n%s\n", diff.Diff(sample, generated))
+	if generated := out.String(); generated != expectedPic {
+		t.Fatalf("Generated picture did not match:\n%s\n", diff.Diff(expectedPic, generated))
 	}
 }
