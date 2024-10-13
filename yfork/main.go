@@ -1,6 +1,5 @@
 // Go implementation for the "Functions and Fractals - Recursive Trees - Bash!" problem.
 // https://www.hackerrank.com/challenges/fractal-trees-all/problem
-//
 package main
 
 import (
@@ -50,7 +49,7 @@ func drawForkPart(scale, iter uint64) uint64 {
 type Row uint64
 
 func (r Row) String() string {
-	// Convert uint64 to []byte{} in-place, replacing 0 with '_' an 1 with '1'.
+	// Convert uint64 to []byte{} in-place by replacing 0 with '_' an 1 with '1' ASCII code representations.
 	buf := [64]byte{}
 	for i := len(buf) - 1; i >= 0; i-- {
 		buf[i] = '_' - byte((r>>i)&0x1)*46 // magic :)
